@@ -1,31 +1,12 @@
-import com.sun.tools.javac.Main;
-
 import javax.swing.*;
 import javax.json.Json;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.awt.event.WindowEvent;
 
-public class MainFrame {
-    private Users users;
-
-    MainFrame() {
-	init_users();
-        LoginPage login_page = new LoginPage(users);
-    }
-
-    public static void main(String[] args) {
-        new MainFrame();
-    }
-
-    private void init_users() {
-	    // read from file
-	    this.users = new Users();
-    }
-}
-
-class LoginPage extends JFrame implements ActionListener {
+class LoginFrame extends JFrame implements ActionListener {
     JPasswordField password_field;
     JTextField username_field;
     JLabel password_label;
@@ -37,10 +18,10 @@ class LoginPage extends JFrame implements ActionListener {
     JCheckBox show_password_checkbox;
     Users users;
     
-    public LoginPage(Users users) {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public LoginFrame(Users users) {
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
-        setTitle("Multiplication Table Practice");
+        setTitle("Login");
         setLocationRelativeTo(null);
         setLayout(null);
 	add_components();
@@ -94,10 +75,7 @@ class LoginPage extends JFrame implements ActionListener {
             if (users.user_exists(username_text, password_text)) {
                 JOptionPane.showMessageDialog(this, "You logged in successfully");
             }
-
             else {
-
-	        System.out.println("Hi");
 		if (users.get_user_count() == 0) {
                 	JOptionPane.showMessageDialog(this, "You registered successfully as admin");
 		}
@@ -106,8 +84,8 @@ class LoginPage extends JFrame implements ActionListener {
 		}
 		users.add_user(new User(username_text, password_text));
             }
-	    PracticePage practice_page = new PracticePage();
-	    practice_page.run();
+	    PracticeFrame practice_frame = new PracticeFrame(users);
+	    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
         }
         else if (actionEvent.getSource() == reset_button) {
             username_field.setText("");
@@ -122,59 +100,5 @@ class LoginPage extends JFrame implements ActionListener {
             }
         }
     }
-}
-
-
-class PracticePage extends JFrame {
-	public PracticePage() {
-		;
-	}
-
-	public void run() {
-        	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        	this.setSize(800, 600);
-        	this.setTitle("Practice");
-        	this.setLocationRelativeTo(null);
-        	this.setLayout(null);
-        	this.setVisible(true);
-	}
-}
-
-class User {
-	private String username;
-	private String password;
-	
-	public User(String username, String password) {
-		this.username = username;
-		this.password = password;
-	}
-	public String get_passw() {return password; }
-	public String get_username() {return username; }
-}
-
-class Users {
-	private ArrayList<User> user_array;
-
-	public void add_user(User user) {
-		user_array.add(user);
-	}
-
-	public boolean user_exists(String username, String password) {
-		for (int i = 0; i < user_array.size(); ++i) {
-			if (password.equals(user_array.get(i).get_passw()) &&
-				username.equals(user_array.get(i).get_username())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public int get_user_count() {
-		return user_array.size();
-	}
-
-	public Users () {
-		user_array = new ArrayList<User>();
-	}
 }
 
