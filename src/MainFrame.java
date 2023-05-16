@@ -93,7 +93,7 @@ class LoginPage {
         if (actionEvent.getSource() == sign_in_button) {
             String username_text = username_field.getText();
             String password_text = new String(password_field.getPassword());
-            if (Json.) {
+            if (username_text == "A" && password_text == "B") {
                 JOptionPane.showMessageDialog(main_frame, "You logged in successfully");
             }
             else {
