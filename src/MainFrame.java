@@ -5,32 +5,27 @@ import javax.json.Json;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 
-public class MainFrame extends JFrame implements ActionListener {
-    private LoginPage login_page;
+public class MainFrame {
+    private Users users;
 
     MainFrame() {
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(800, 600);
-        this.setTitle("Multiplication Table Practice");
-        this.setLocationRelativeTo(null);
-        this.setLayout(null);
-        login_page = new LoginPage(this);
-        this.setVisible(true);
-
+	init_users();
+        LoginPage login_page = new LoginPage(users);
     }
 
     public static void main(String[] args) {
         new MainFrame();
     }
 
-    @Override
-    public void actionPerformed(ActionEvent actionEvent) {
-        login_page.actionPerformed(actionEvent, this);
+    private void init_users() {
+	    // read from file
+	    this.users = new Users();
     }
 }
 
-class LoginPage {
+class LoginPage extends JFrame implements ActionListener {
     JPasswordField password_field;
     JTextField username_field;
     JLabel password_label;
@@ -40,9 +35,20 @@ class LoginPage {
     JButton sign_in_button;
     JButton reset_button;
     JCheckBox show_password_checkbox;
-    JButton register_button;
+    Users users;
+    
+    public LoginPage(Users users) {
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 600);
+        setTitle("Multiplication Table Practice");
+        setLocationRelativeTo(null);
+        setLayout(null);
+	add_components();
+        setVisible(true);
+	this.users = users;
+    }
 
-    public LoginPage(MainFrame main_frame) {
+    public void add_components() {
         password_field = new JPasswordField();
         password_field.setBounds(300, 200, 300, 40);
 
@@ -57,44 +63,51 @@ class LoginPage {
 
         sign_in_button = new JButton("Sign in");
         sign_in_button.setBounds(300, 300, 100, 40);
-        sign_in_button.addActionListener(main_frame);
+        sign_in_button.addActionListener(this);
 
         reset_button = new JButton("Reset");
         reset_button.setBounds(500, 300, 100, 40);
-        reset_button.addActionListener(main_frame);
+        reset_button.addActionListener(this);
 
         message_label = new JLabel("");
         message_label.setBounds(300, 350, 300, 40);
 
         show_password_checkbox = new JCheckBox("Show password");
         show_password_checkbox.setBounds(300, 250, 300, 40);
-        show_password_checkbox.addActionListener(main_frame);
+        show_password_checkbox.addActionListener(this);
 
-        register_button = new JButton("Register");
-        register_button.setBounds(300, 350, 100, 40);
-        register_button.addActionListener(main_frame);
-
-        main_frame.add(password_field);
-        main_frame.add(password_label);
-        main_frame.add(username_label);
-        main_frame.add(username_field);
-        main_frame.add(sign_in_button);
-        main_frame.add(message_label);
-        main_frame.add(reset_button);
-        main_frame.add(show_password_checkbox);
-        main_frame.add(register_button);
+        add(password_field);
+        add(password_label);
+        add(username_label);
+        add(username_field);
+        add(sign_in_button);
+        add(message_label);
+        add(reset_button);
+        add(show_password_checkbox);
     }
 
-    public void actionPerformed(ActionEvent actionEvent, MainFrame main_frame) {
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() == sign_in_button) {
             String username_text = username_field.getText();
             String password_text = new String(password_field.getPassword());
-            if (username_text == "A" && password_text == "B") {
-                JOptionPane.showMessageDialog(main_frame, "You logged in successfully");
+            if (users.user_exists(username_text, password_text)) {
+                JOptionPane.showMessageDialog(this, "You logged in successfully");
             }
+
             else {
-                JOptionPane.showMessageDialog(main_frame, "Invalid username or password");
+
+	        System.out.println("Hi");
+		if (users.get_user_count() == 0) {
+                	JOptionPane.showMessageDialog(this, "You registered successfully as admin");
+		}
+		else {
+                	JOptionPane.showMessageDialog(this, "You registered successfully");
+		}
+		users.add_user(new User(username_text, password_text));
             }
+	    PracticePage practice_page = new PracticePage();
+	    practice_page.run();
         }
         else if (actionEvent.getSource() == reset_button) {
             username_field.setText("");
@@ -110,3 +123,58 @@ class LoginPage {
         }
     }
 }
+
+
+class PracticePage extends JFrame {
+	public PracticePage() {
+		;
+	}
+
+	public void run() {
+        	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        	this.setSize(800, 600);
+        	this.setTitle("Practice");
+        	this.setLocationRelativeTo(null);
+        	this.setLayout(null);
+        	this.setVisible(true);
+	}
+}
+
+class User {
+	private String username;
+	private String password;
+	
+	public User(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+	public String get_passw() {return password; }
+	public String get_username() {return username; }
+}
+
+class Users {
+	private ArrayList<User> user_array;
+
+	public void add_user(User user) {
+		user_array.add(user);
+	}
+
+	public boolean user_exists(String username, String password) {
+		for (int i = 0; i < user_array.size(); ++i) {
+			if (password.equals(user_array.get(i).get_passw()) &&
+				username.equals(user_array.get(i).get_username())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public int get_user_count() {
+		return user_array.size();
+	}
+
+	public Users () {
+		user_array = new ArrayList<User>();
+	}
+}
+
