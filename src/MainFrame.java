@@ -1,7 +1,3 @@
-// Set external_libraries as dependency in your IDE
-// For Intellij, File -> Project structure -> Project settings -> Modules ->
-//  Dependencies -> + -> jars or directories -> [path of external_dependencies] -> OK
-
 import com.sun.tools.javac.Main;
 
 import javax.swing.*;
