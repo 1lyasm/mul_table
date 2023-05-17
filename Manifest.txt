@@ -1,2 +1,0 @@
-Class-Path: ../external_libraries/gson-2.10.1.jar
-
