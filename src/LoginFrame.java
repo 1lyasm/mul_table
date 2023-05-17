@@ -16,9 +16,9 @@ class LoginFrame extends JFrame implements ActionListener {
     JButton reset_button;
     JCheckBox show_password_checkbox;
     Users users;
-    
+
     public LoginFrame(Users users) {
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(800, 600);
         setTitle("Login");
         setLocationRelativeTo(null);
@@ -68,36 +68,38 @@ class LoginFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if (actionEvent.getSource() == sign_in_button) {
-            String username_text = username_field.getText();
-            String password_text = new String(password_field.getPassword());
-            if (users.user_exists(username_text, password_text)) {
-                JOptionPane.showMessageDialog(this, "You logged in successfully");
-            }
-            else {
-		if (users.get_user_count() == 0) {
-                	JOptionPane.showMessageDialog(this, "You registered successfully as admin");
+	if (actionEvent.getSource() == sign_in_button) {
+		String username_text = username_field.getText();
+		String password_text = new String(password_field.getPassword());
+		if (users.user_exists(username_text, password_text)) {
+			JOptionPane.showMessageDialog(this, "You logged in successfully");
 		}
 		else {
-                	JOptionPane.showMessageDialog(this, "You registered successfully");
+			if (users.get_user_count() == 0) {
+						JOptionPane.showMessageDialog(this, "You registered successfully as admin");
+			}
+			else {
+						JOptionPane.showMessageDialog(this, "You registered successfully");
+			}
+			this.users.add_user(new User(username_text, password_text));
 		}
-		users.add_user(new User(username_text, password_text));
-            }
-	    PracticeFrame practice_frame = new PracticeFrame(users);
-	    dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-        }
-        else if (actionEvent.getSource() == reset_button) {
-            username_field.setText("");
-            password_field.setText("");
-        }
-        else if (actionEvent.getSource() == show_password_checkbox) {
-            if (show_password_checkbox.isSelected()) {
-                password_field.setEchoChar((char) 0);
-            }
-            else {
-                password_field.setEchoChar('*');
-            }
-        }
+	PracticeFrame practice_frame = new PracticeFrame(users);
+	this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+	}
+	else if (actionEvent.getSource() == reset_button) {
+		username_field.setText("");
+		password_field.setText("");
+	}
+	else if (actionEvent.getSource() == show_password_checkbox) {
+		if (show_password_checkbox.isSelected()) {
+			password_field.setEchoChar((char) 0);
+		}
+		else {
+			password_field.setEchoChar('*');
+		}
+	}
     }
+
+    public Users get_users() {return this.users; }
 }
 

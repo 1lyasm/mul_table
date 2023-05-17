@@ -21,6 +21,20 @@ class Users {
 		return user_array.size();
 	}
 
+	public ArrayList<User> get_user_array() {
+		return user_array;
+	}
+
+	public void set_user_array(ArrayList<User> user_array) {
+		this.user_array = user_array;
+	}
+
+	public void print_users() {
+		for (User user: this.user_array) {
+			System.out.print("(" + user.get_username() + ", " + user.get_passw() + ") ");
+		}
+	}
+
 	public Users () {
 		user_array = new ArrayList<User>();
 	}
