@@ -17,6 +17,15 @@ class Users {
 		return false;
 	}
 	
+	public boolean username_exists(String username) {
+		for (int i = 0; i < user_array.size(); ++i) {
+			if (username.equals(user_array.get(i).get_username())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public int get_user_count() {
 		return user_array.size();
 	}
