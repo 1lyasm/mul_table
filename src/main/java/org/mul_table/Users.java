@@ -18,6 +18,16 @@ class Users {
 		}
 		return false;
 	}
+
+	public User get_user_by_uname_passw(String username, String password) {
+		for (User user : user_array) {
+			if (password.equals(user.get_passw()) &&
+					username.equals(user.get_username())) {
+				return user;
+			}
+		}
+		return null;
+	}
 	
 	public boolean username_exists(String username) {
 		for (User user : user_array) {
@@ -50,4 +60,3 @@ class Users {
 		user_array = new ArrayList<User>();
 	}
 }
-

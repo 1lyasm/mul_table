@@ -29,7 +29,7 @@ class Serializer {
 
     }
 
-    public Users deserialize() {
+    public Users deserialize_users() {
         Users users = new Users();
         try {
             String json_string = new String(Files.readAllBytes(users_file.toPath()));
@@ -44,7 +44,7 @@ class Serializer {
         return users;
     }
 
-    public void serialize(Users users) {
+    public void serialize_users(Users users) {
         String json_string = gson.toJson(users);
         try {
             Files.write(users_file.toPath(), json_string.getBytes());

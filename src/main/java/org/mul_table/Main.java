@@ -4,10 +4,9 @@ public class Main {
     Serializer serializer;
     public Main() {
 	serializer = new Serializer();
-	Users users = serializer.deserialize();
+	Users users = serializer.deserialize_users();
         LoginFrame login_frame = new LoginFrame(users, serializer);
     }
-    
 
     public static void main(String[] args) {
 	    new Main();

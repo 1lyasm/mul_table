@@ -52,7 +52,7 @@ class LoginFrame extends JFrame implements ActionListener {
         reset_button.setBounds(500, 300, 100, 40);
         reset_button.addActionListener(this);
 
-	register_button = new JButton("Register");
+	    register_button = new JButton("Register");
         register_button.setBounds(500, 350, 100, 40);
         register_button.addActionListener(this);
 
@@ -76,44 +76,50 @@ class LoginFrame extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-	if (actionEvent.getSource() == sign_in_button) {
-		String username_text = username_field.getText();
-		String password_text = new String(password_field.getPassword());
-		if (users.user_exists(username_text, password_text)) {
-			JOptionPane.showMessageDialog(this, "You logged in successfully");
-			PracticeFrame practice_frame = new PracticeFrame(users);
-		 	this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-		}
-		else {
-			JOptionPane.showMessageDialog(this, "Username or password incorrect");
-		}
-	}
-	else if (actionEvent.getSource() == register_button) {
-		RegistrationFrame register_frame = new RegistrationFrame(this.users);
-		this.setVisible(false);
-		register_frame.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				setVisible(true);
-				users.set_user_array(register_frame.get_users().get_user_array());
-				register_frame.dispose();
-				users.print_users();
-				serializer.serialize(users);
-			}
-		});
-	}
-	else if (actionEvent.getSource() == reset_button) {
-		username_field.setText("");
-		password_field.setText("");
-	}
-	else if (actionEvent.getSource() == show_password_checkbox) {
-		if (show_password_checkbox.isSelected()) {
-			password_field.setEchoChar((char) 0);
-		}
-		else {
-			password_field.setEchoChar('*');
-		}
-	}
+        if (actionEvent.getSource() == sign_in_button) {
+            String username_text = username_field.getText();
+            String password_text = new String(password_field.getPassword());
+            if (users.user_exists(username_text, password_text)) {
+                PracticeFrame practice_frame;
+                if (users.get_user_by_uname_passw(username_text, password_text).get_is_admin()) {
+                    JOptionPane.showMessageDialog(this, "You logged in successfully as admin");
+                    practice_frame = new AdminPracticeFrame(users);
+                } else {
+                    JOptionPane.showMessageDialog(this, "You logged in successfully");
+                    practice_frame = new PracticeFrame(users);
+                }
+                this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+            }
+            else {
+                JOptionPane.showMessageDialog(this, "Username or password incorrect");
+            }
+        }
+        else if (actionEvent.getSource() == register_button) {
+            RegistrationFrame register_frame = new RegistrationFrame(this.users);
+            this.setVisible(false);
+            register_frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    setVisible(true);
+                    users.set_user_array(register_frame.get_users().get_user_array());
+                    register_frame.dispose();
+                    users.print_users();
+                    serializer.serialize_users(users);
+                }
+            });
+        }
+        else if (actionEvent.getSource() == reset_button) {
+            username_field.setText("");
+            password_field.setText("");
+        }
+        else if (actionEvent.getSource() == show_password_checkbox) {
+            if (show_password_checkbox.isSelected()) {
+                password_field.setEchoChar((char) 0);
+            }
+            else {
+                password_field.setEchoChar('*');
+            }
+        }
     }
 
     public Users get_users() {return this.users; }
