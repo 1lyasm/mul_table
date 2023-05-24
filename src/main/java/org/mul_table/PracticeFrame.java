@@ -1,16 +1,13 @@
 package org.mul_table;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.registry.Registry;
-import java.util.ArrayList;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;
-import java.awt.Font;
+import java.awt.event.WindowEvent;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 class PracticeFrame extends JFrame implements ActionListener {
 	JButton start_button;

@@ -3,8 +3,6 @@ package org.mul_table;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.registry.Registry;
-import java.util.ArrayList;
 import java.awt.event.WindowEvent;
 
 class RegistrationFrame extends JFrame implements ActionListener {
@@ -13,7 +11,6 @@ class RegistrationFrame extends JFrame implements ActionListener {
     JLabel password_label;
     JLabel username_label;
     JLabel message_label;
-    JLabel title_label;
     JButton register_button;
     JButton reset_button;
     JCheckBox show_password_checkbox;

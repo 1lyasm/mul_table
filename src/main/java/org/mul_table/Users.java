@@ -10,9 +10,9 @@ class Users {
 	}
 
 	public boolean user_exists(String username, String password) {
-		for (int i = 0; i < user_array.size(); ++i) {
-			if (password.equals(user_array.get(i).get_passw()) &&
-				username.equals(user_array.get(i).get_username())) {
+		for (User user : user_array) {
+			if (password.equals(user.get_passw()) &&
+					username.equals(user.get_username())) {
 				return true;
 			}
 		}
@@ -20,8 +20,8 @@ class Users {
 	}
 	
 	public boolean username_exists(String username) {
-		for (int i = 0; i < user_array.size(); ++i) {
-			if (username.equals(user_array.get(i).get_username())) {
+		for (User user : user_array) {
+			if (username.equals(user.get_username())) {
 				return true;
 			}
 		}
