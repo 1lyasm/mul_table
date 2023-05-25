@@ -18,17 +18,16 @@ class LoginFrame extends JFrame implements ActionListener {
     JButton register_button;
     Users users;
     Serializer serializer;
-
     public LoginFrame(Users users, Serializer serializer) {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
         setTitle("Login");
         setLocationRelativeTo(null);
         setLayout(null);
-	add_components();
+	    add_components();
         setVisible(true);
-	this.users = users;
-	this.serializer = serializer;
+        this.users = users;
+        this.serializer = serializer;
     }
 
     public void add_components() {
@@ -81,12 +80,13 @@ class LoginFrame extends JFrame implements ActionListener {
             String password_text = new String(password_field.getPassword());
             if (users.user_exists(username_text, password_text)) {
                 PracticeFrame practice_frame;
+                Exercises exercises = this.serializer.deserialize_exercises();
                 if (users.get_user_by_uname_passw(username_text, password_text).get_is_admin()) {
                     JOptionPane.showMessageDialog(this, "You logged in successfully as admin");
-                    practice_frame = new AdminPracticeFrame(users);
+                    practice_frame = new AdminPracticeFrame(users, serializer, exercises);
                 } else {
                     JOptionPane.showMessageDialog(this, "You logged in successfully");
-                    practice_frame = new PracticeFrame(users);
+                    practice_frame = new PracticeFrame(users, serializer, exercises);
                 }
                 this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
             }
@@ -103,7 +103,6 @@ class LoginFrame extends JFrame implements ActionListener {
                     setVisible(true);
                     users.set_user_array(register_frame.get_users().get_user_array());
                     register_frame.dispose();
-                    users.print_users();
                     serializer.serialize_users(users);
                 }
             });

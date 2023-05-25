@@ -5,7 +5,7 @@ public class Main {
     public Main() {
 	serializer = new Serializer();
 	Users users = serializer.deserialize_users();
-        LoginFrame login_frame = new LoginFrame(users, serializer);
+    LoginFrame login_frame = new LoginFrame(users, serializer);
     }
 
     public static void main(String[] args) {
