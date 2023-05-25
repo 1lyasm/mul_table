@@ -12,16 +12,22 @@ public class ExerciseStatistic {
     ArrayList<Question> questions;
     double speed_score;
     double accuracy_score;
+    Exercise e_mode;
 
-    public ExerciseStatistic(LocalDateTime start_time, User user) {
+    public ExerciseStatistic(LocalDateTime start_time, User user, Exercise e_mode) {
         this.start_time = start_time;
         this.user = user;
+        this.e_mode = e_mode;
         this.total_duration = Duration.ZERO;
         this.questions = new ArrayList<Question>();
     }
 
     public ArrayList<Question> get_questions() {
         return this.questions;
+    }
+
+    public Exercise get_e_mode() {
+        return this.e_mode;
     }
 
     public LocalDateTime get_start_time() {

@@ -135,21 +135,19 @@ class PracticeFrame extends JFrame implements ActionListener {
 			this.revalidate();
 			this.repaint();
 			rand = new Random();
-			exercise_statistic = new ExerciseStatistic(LocalDateTime.now(), this.logged_in_user);
+			exercise_statistic = new ExerciseStatistic(LocalDateTime.now(), this.logged_in_user, this.current_mode);
 			int a = rand.nextInt(this.current_mode.get_a() + 1);
 			int b = rand.nextInt(this.current_mode.get_b() + 1);
 			exercise_statistic.get_questions().add(new Question(a, b));
 			this.question_label.setText(a + " x " + b + " = ");
 			this.question_label.setBounds(250, 200, 300, 40);
 			this.question_label.setFont(new Font("Serif", Font.PLAIN, 24));
-			for (JButton button: this.e_buttons) {
+			for (JButton button: this.e_buttons)
 				button.setEnabled(false);
-			}
 			this.add(submit_button);
 			this.answer_field = new JTextField();
 			this.answer_field.setBounds(340, 200, 200, 40);
 			this.add(this.answer_field);
-
 			this.has_started = true;
 		}
 		else if (actionEvent.getSource() == this.submit_button) {

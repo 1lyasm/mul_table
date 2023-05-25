@@ -19,6 +19,7 @@ class LoginFrame extends JFrame implements ActionListener {
     Users users;
     Serializer serializer;
     ExercisesStatistic statistics;
+    HighScoreTables tables;
     public LoginFrame(Users users, Serializer serializer) {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
@@ -30,6 +31,7 @@ class LoginFrame extends JFrame implements ActionListener {
         this.users = users;
         this.serializer = serializer;
         this.statistics = new ExercisesStatistic();
+        this.tables = new HighScoreTables();
     }
 
     public void add_components() {
@@ -94,9 +96,16 @@ class LoginFrame extends JFrame implements ActionListener {
                     @Override
                     public void windowClosing(WindowEvent e) {
                         super.windowClosing(e);
+
                         statistics = serializer.deserialize_exercises_statistic();
                         statistics.add_statistic(practice_frame.get_exercise_statistic());
                         serializer.serialize_exercises_statistic(statistics);
+
+                        tables = serializer.deserialize_tables();
+                        tables.add_score(practice_frame.get_exercise_statistic());
+                        serializer.serialize_tables(tables);
+
+                        practice_frame.dispose();
                     }
                 });
                 this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));

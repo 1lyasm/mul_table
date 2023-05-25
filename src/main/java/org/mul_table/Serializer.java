@@ -21,6 +21,7 @@ class Serializer {
     File users_file;
     File exercises_file;
     File exercises_statistic_file;
+    File tables_file;
     Gson gson;
 
     public Serializer() {
@@ -50,6 +51,15 @@ class Serializer {
         if (!this.exercises_statistic_file.canRead()) {
             try {
                 this.exercises_statistic_file.createNewFile();
+            } catch (IOException e) {
+                System.out.println("Error creating file");
+                System.exit(1);
+            }
+        }
+        this.tables_file = new File("mul_table_data/tables.json");
+        if (!this.tables_file.canRead()) {
+            try {
+                this.tables_file.createNewFile();
             } catch (IOException e) {
                 System.out.println("Error creating file");
                 System.exit(1);
@@ -154,6 +164,31 @@ class Serializer {
         String json_string = gson.toJson(exercises_statistic);
         try {
             Files.write(exercises_statistic_file.toPath(), json_string.getBytes());
+        } catch (IOException e) {
+            System.out.println("Error writing to file");
+            System.exit(1);
+        }
+    }
+
+    public HighScoreTables deserialize_tables() {
+        HighScoreTables tables = new HighScoreTables();
+        try {
+            String json_string = new String(Files.readAllBytes(this.tables_file.toPath()));
+            tables = gson.fromJson(json_string, HighScoreTables.class);
+            if (tables == null) {
+                tables = new HighScoreTables();
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file");
+            System.exit(1);
+        }
+        return tables;
+    }
+
+    public void serialize_tables(HighScoreTables tables) {
+        String json_string = gson.toJson(tables);
+        try {
+            Files.write(tables_file.toPath(), json_string.getBytes());
         } catch (IOException e) {
             System.out.println("Error writing to file");
             System.exit(1);
