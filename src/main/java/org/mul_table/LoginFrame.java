@@ -94,6 +94,7 @@ class LoginFrame extends JFrame implements ActionListener {
                     @Override
                     public void windowClosing(WindowEvent e) {
                         super.windowClosing(e);
+                        statistics = serializer.deserialize_exercises_statistic();
                         statistics.add_statistic(practice_frame.get_exercise_statistic());
                         serializer.serialize_exercises_statistic(statistics);
                     }

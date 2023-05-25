@@ -81,6 +81,7 @@ class Serializer {
                         return new JsonPrimitive(src.toNanos());
                     }
                 })
+                 .setPrettyPrinting()
                 .create();
     }
 
@@ -134,20 +135,20 @@ class Serializer {
         }
     }
 
-//    public Exercises deserialize_exercise_statistic() {
-//        Exercises exercises = new Exercises();
-//        try {
-//            String json_string = new String(Files.readAllBytes(exercises_file.toPath()));
-//            exercises = gson.fromJson(json_string, Exercises.class);
-//            if (exercises == null) {
-//                exercises = new Exercises();
-//            }
-//        } catch (IOException e) {
-//            System.out.println("Error reading file");
-//            System.exit(1);
-//        }
-//        return exercises;
-//    }
+    public ExercisesStatistic deserialize_exercises_statistic() {
+        ExercisesStatistic e_s = new ExercisesStatistic();
+        try {
+            String json_string = new String(Files.readAllBytes(this.exercises_statistic_file.toPath()));
+            e_s = gson.fromJson(json_string, ExercisesStatistic.class);
+            if (e_s == null) {
+                e_s = new ExercisesStatistic();
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file");
+            System.exit(1);
+        }
+        return e_s;
+    }
 
     public void serialize_exercises_statistic(ExercisesStatistic exercises_statistic) {
         String json_string = gson.toJson(exercises_statistic);
