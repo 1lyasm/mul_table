@@ -55,12 +55,10 @@ class Serializer {
 
     public Exercises deserialize_exercises() {
         Exercises exercises = new Exercises();
-        System.out.println("cant deser");
         try {
             String json_string = new String(Files.readAllBytes(exercises_file.toPath()));
             exercises = gson.fromJson(json_string, Exercises.class);
             if (exercises == null) {
-//                System.out.println("cant deser");
                 exercises = new Exercises();
             }
         } catch (IOException e) {

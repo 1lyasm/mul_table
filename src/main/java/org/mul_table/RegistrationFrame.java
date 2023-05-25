@@ -22,7 +22,7 @@ class RegistrationFrame extends JFrame implements ActionListener {
         setTitle("Register");
         setLocationRelativeTo(null);
         setLayout(null);
-	add_components();
+	    add_components();
         setVisible(true);
 	this.users = users;
     }

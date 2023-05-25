@@ -8,14 +8,14 @@ import java.awt.event.WindowEvent;
 public class AdminPracticeFrame extends PracticeFrame {
     JButton admin_button;
     int last_e_len;
-    public AdminPracticeFrame(Users users, Serializer serializer, Exercises exercises) {
-        super(users, serializer, exercises);
+    public AdminPracticeFrame(Users users, Serializer serializer, Exercises exercises, User logged_in_user) {
+        super(users, serializer, exercises, logged_in_user);
         add_admin_components();
     }
 
     public void add_admin_components() {
         admin_button = new JButton("Admin page");
-        admin_button.setBounds(330, 350, 150, 40);
+        admin_button.setBounds(330, 400, 150, 40);
         admin_button.addActionListener(this);
 
         this.add(admin_button);

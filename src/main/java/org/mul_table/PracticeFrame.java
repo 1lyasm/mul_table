@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -18,6 +20,7 @@ class PracticeFrame extends JFrame implements ActionListener {
 	JLabel timer_label;
 	JLabel mode_choice_label;
 	JLabel question_label;
+	JTextField answer_field;
 	Users users;
 	int time_seconds;
 	ScheduledThreadPoolExecutor scheduler;
@@ -25,8 +28,12 @@ class PracticeFrame extends JFrame implements ActionListener {
 	ArrayList<JButton> e_buttons;
 	Serializer serializer;
 	Exercise current_mode;
+	boolean has_started;
+	ExerciseStatistic exercise_statistic;
+	User logged_in_user;
+	Random rand;
 
-	public PracticeFrame(Users users, Serializer serializer, Exercises exercises) {
+	public PracticeFrame(Users users, Serializer serializer, Exercises exercises, User logged_in_user) {
 		this.users = users;
 		this.exercises = exercises;
 		this.serializer = serializer;
@@ -36,6 +43,9 @@ class PracticeFrame extends JFrame implements ActionListener {
 		this.add(this.question_label);
 		this.submit_button = new JButton("Submit");
 		this.submit_button.setBounds(330, 350, 150, 40);
+		this.submit_button.addActionListener(this);
+		this.has_started = false;
+		this.logged_in_user = logged_in_user;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(800, 600);
 		setTitle("Multiplication Table Practice");
@@ -124,15 +134,63 @@ class PracticeFrame extends JFrame implements ActionListener {
 			this.remove(this.mode_choice_label);
 			this.revalidate();
 			this.repaint();
-			Random rand = new Random();
-			this.question_label.setText(rand.nextInt(this.current_mode.get_a() + 1) + " x " +
-						rand.nextInt(this.current_mode.get_b() + 1) + " = ");
-			this.question_label.setBounds(340, 200, 300, 40);
+			rand = new Random();
+			exercise_statistic = new ExerciseStatistic(LocalDateTime.now(), this.logged_in_user);
+			int a = rand.nextInt(this.current_mode.get_a() + 1);
+			int b = rand.nextInt(this.current_mode.get_b() + 1);
+			exercise_statistic.get_questions().add(new Question(a, b));
+			this.question_label.setText(a + " x " + b + " = ");
+			this.question_label.setBounds(250, 200, 300, 40);
 			this.question_label.setFont(new Font("Serif", Font.PLAIN, 24));
-			for (JButton b: this.e_buttons) {
-				b.setEnabled(false);
+			for (JButton button: this.e_buttons) {
+				button.setEnabled(false);
 			}
 			this.add(submit_button);
+			this.answer_field = new JTextField();
+			this.answer_field.setBounds(340, 200, 200, 40);
+			this.add(this.answer_field);
+
+
+			this.has_started = true;
+		}
+		else if (actionEvent.getSource() == this.submit_button) {
+			try {
+				int given_answer = Integer.parseInt(this.answer_field.getText());
+				this.exercise_statistic.get_questions().get(this.exercise_statistic.get_questions().size() - 1).set_given_answer(given_answer);
+				String answer_result;
+				if (this.exercise_statistic.get_questions().get(this.exercise_statistic.get_questions().size() - 1).is_false()) {
+					answer_result = new String("false");
+				}
+				else {
+					answer_result = new String("true");
+				}
+				JOptionPane.showMessageDialog(this, "Your answer is " + answer_result);
+				this.exercise_statistic.get_questions().get(this.exercise_statistic.get_questions().size() - 1).set_answer_duration(
+						Duration.between(this.exercise_statistic.get_start_time().plus(this.exercise_statistic.get_total_duration()),
+								LocalDateTime.now()));
+				this.exercise_statistic.extend_total_duration(this.exercise_statistic.get_questions().get(this.exercise_statistic.get_questions().size() - 1).get_answer_duration());
+				if (this.exercise_statistic.get_questions().size() == this.current_mode.get_n()) {
+					this.scheduler.shutdownNow();
+					this.exercise_statistic.calculate_scores();
+					// TODO: round
+					JOptionPane.showMessageDialog(this, "Speed score: " + this.exercise_statistic.get_speed_score()
+							+ ", accuracy score: " + this.exercise_statistic.get_accuracy_score() + "");
+					this.remove(this.submit_button);
+					this.remove(this.question_label);
+					this.remove(this.answer_field);
+					this.revalidate();
+					this.repaint();
+				}
+				else {
+					int a = rand.nextInt(this.current_mode.get_a() + 1);
+					int b = rand.nextInt(this.current_mode.get_b() + 1);
+					exercise_statistic.get_questions().add(new Question(a, b));
+					this.question_label.setText(a + " x " + b + " = ");
+				}
+			}
+			catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "You did not enter an integer");
+			}
 		}
 		else if (actionEvent.getSource() == this.default_e_button) {
 			this.current_mode = new Exercise(10, 10, 10, "Default");

@@ -83,10 +83,10 @@ class LoginFrame extends JFrame implements ActionListener {
                 Exercises exercises = this.serializer.deserialize_exercises();
                 if (users.get_user_by_uname_passw(username_text, password_text).get_is_admin()) {
                     JOptionPane.showMessageDialog(this, "You logged in successfully as admin");
-                    practice_frame = new AdminPracticeFrame(users, serializer, exercises);
+                    practice_frame = new AdminPracticeFrame(users, serializer, exercises, new User(username_text, password_text));
                 } else {
                     JOptionPane.showMessageDialog(this, "You logged in successfully");
-                    practice_frame = new PracticeFrame(users, serializer, exercises);
+                    practice_frame = new PracticeFrame(users, serializer, exercises, new User(username_text, password_text));
                 }
                 this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
             }
