@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class ExerciseStatistic {
     User user;
     LocalDateTime start_time;
-
     Duration total_duration;
     ArrayList<Question> questions;
     double speed_score;
@@ -43,7 +42,13 @@ public class ExerciseStatistic {
             if (!q.is_false())
                 ++accurate_count;
         this.accuracy_score = 100 * accurate_count / (double) this.questions.size();
-        this.speed_score =  1000000 / (double) this.total_duration.toMillis();
+        this.accuracy_score = Math.round(this.accuracy_score * 100) / 100.0;
+
+        double average = 0;
+        for (Question q: this.questions)
+            average += 100.0 * (Math.pow(2, -q.get_answer_duration().toMillis() / 10000.0));
+        average /= this.questions.size();
+        this.speed_score = Math.round(average * 100) / 100.0;
     }
 
     public double get_accuracy_score() {

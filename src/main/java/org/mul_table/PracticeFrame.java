@@ -150,7 +150,6 @@ class PracticeFrame extends JFrame implements ActionListener {
 			this.answer_field.setBounds(340, 200, 200, 40);
 			this.add(this.answer_field);
 
-
 			this.has_started = true;
 		}
 		else if (actionEvent.getSource() == this.submit_button) {
@@ -172,9 +171,8 @@ class PracticeFrame extends JFrame implements ActionListener {
 				if (this.exercise_statistic.get_questions().size() == this.current_mode.get_n()) {
 					this.scheduler.shutdownNow();
 					this.exercise_statistic.calculate_scores();
-					// TODO: round
 					JOptionPane.showMessageDialog(this, "Speed score: " + this.exercise_statistic.get_speed_score()
-							+ ", accuracy score: " + this.exercise_statistic.get_accuracy_score() + "");
+							+ "\nAccuracy score: " + this.exercise_statistic.get_accuracy_score() + "");
 					this.remove(this.submit_button);
 					this.remove(this.question_label);
 					this.remove(this.answer_field);
@@ -209,5 +207,9 @@ class PracticeFrame extends JFrame implements ActionListener {
 			}
 		}
     }
+
+	public ExerciseStatistic get_exercise_statistic() {
+		return this.exercise_statistic;
+	}
 }
 

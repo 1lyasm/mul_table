@@ -31,6 +31,7 @@ public class AdminPracticeFrame extends PracticeFrame {
             admin_frame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
+                    super.windowClosing(e);
                     setVisible(true);
                     users.set_user_array(admin_frame.get_users().get_user_array());
                     exercises.set_exercise_array(admin_frame.get_exercises().get_exercise_array());
@@ -42,6 +43,9 @@ public class AdminPracticeFrame extends PracticeFrame {
                                             .get(exercises.get_exercise_array().size() - i - 1).get_name());
                             new_e_button.setBounds(650, e_buttons.get(e_buttons.size() - 1).getY() + 50, 80, 40);
                             new_e_button.addActionListener(this_frame);
+                            if (has_started) {
+                                new_e_button.setEnabled(false);
+                            }
                             e_buttons.add(new_e_button);
                             this_frame.add(new_e_button);
                         }

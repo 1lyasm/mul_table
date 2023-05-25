@@ -18,6 +18,7 @@ class LoginFrame extends JFrame implements ActionListener {
     JButton register_button;
     Users users;
     Serializer serializer;
+    ExercisesStatistic statistics;
     public LoginFrame(Users users, Serializer serializer) {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(800, 600);
@@ -28,6 +29,7 @@ class LoginFrame extends JFrame implements ActionListener {
         setVisible(true);
         this.users = users;
         this.serializer = serializer;
+        this.statistics = new ExercisesStatistic();
     }
 
     public void add_components() {
@@ -88,6 +90,14 @@ class LoginFrame extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(this, "You logged in successfully");
                     practice_frame = new PracticeFrame(users, serializer, exercises, new User(username_text, password_text));
                 }
+                practice_frame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        super.windowClosing(e);
+                        statistics.add_statistic(practice_frame.get_exercise_statistic());
+                        serializer.serialize_exercises_statistic(statistics);
+                    }
+                });
                 this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
             }
             else {
