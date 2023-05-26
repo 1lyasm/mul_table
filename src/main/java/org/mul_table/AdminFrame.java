@@ -101,8 +101,16 @@ class AdminFrame extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Parameters not in range");
                 }
                 else {
-                    this.exercises.get_exercise_array().add(new Exercise(a, b, n, name));
-                    JOptionPane.showMessageDialog(this, "Added new exercise mode: " + name);
+                    boolean is_duplicate = false;
+                    for (Exercise e: this.exercises.get_exercise_array())
+                        if (e.get_name().equals(name))
+                            is_duplicate = true;
+                    if (is_duplicate)
+                        JOptionPane.showMessageDialog(this, "Duplicate exercise names not allowed");
+                    else {
+                        this.exercises.get_exercise_array().add(new Exercise(a, b, n, name));
+                        JOptionPane.showMessageDialog(this, "Added new exercise mode: " + name);
+                    }
                 }
             }
             catch (NumberFormatException n) {
