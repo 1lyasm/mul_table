@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
@@ -13,18 +14,20 @@ class AdminFrame extends JFrame implements ActionListener {
 
     JLabel b_label;
     JTextField b_field;
-
     JLabel n_label;
     JTextField n_field;
     JLabel e_name_label;
     JTextField e_name_field;
     JButton to_practice_button;
     JButton add_exercise_button;
+    JButton report_button;
     Exercises exercises;
     Users users;
     Serializer serializer;
+    ExercisesStatistic statistics;
+    HighScoreTables tables;
 
-    public AdminFrame(Users users, Serializer serializer, Exercises exercises) {
+    public AdminFrame(Users users, Serializer serializer, Exercises exercises, HighScoreTables tables, ExercisesStatistic statistics) {
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(800, 600);
         setTitle("Admin");
@@ -35,6 +38,8 @@ class AdminFrame extends JFrame implements ActionListener {
         this.users = users;
         this.serializer = serializer;
         this.exercises = exercises;
+        this.statistics = statistics;
+        this.tables = tables;
     }
 
     public void add_components() {
@@ -74,6 +79,10 @@ class AdminFrame extends JFrame implements ActionListener {
         add_exercise_button.setBounds(300, 440, 150, 40);
         add_exercise_button.addActionListener(this);
 
+        this.report_button = new JButton("View reports");
+        this.report_button.setBounds(300, 490, 150, 40);
+        this.report_button.addActionListener(this);
+
         add(a_label);
         add(a_field);
         add(b_label);
@@ -84,6 +93,7 @@ class AdminFrame extends JFrame implements ActionListener {
         add(e_name_field);
         add(to_practice_button);
         add(add_exercise_button);
+        add(this.report_button);
     }
 
     @Override
@@ -97,9 +107,8 @@ class AdminFrame extends JFrame implements ActionListener {
                 int b = Integer.parseInt(b_field.getText());
                 int n = Integer.parseInt(n_field.getText());
                 String name = e_name_field.getText();
-                if (a < 1 || a > 10 || b < 1 || b > 10 || n < 1) {
+                if (a < 1 || a > 10 || b < 1 || b > 10 || n < 1)
                     JOptionPane.showMessageDialog(this, "Parameters not in range");
-                }
                 else {
                     boolean is_duplicate = false;
                     for (Exercise e: this.exercises.get_exercise_array())
@@ -116,6 +125,19 @@ class AdminFrame extends JFrame implements ActionListener {
             catch (NumberFormatException n) {
                 JOptionPane.showMessageDialog(this, "Enter valid numbers");
             }
+        }
+        else if (actionEvent.getSource() == this.report_button) {
+            ReportFrame report_frame = new ReportFrame(tables, statistics);
+            this.setVisible(false);
+            report_frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    super.windowClosing(e);
+                    setVisible(true);
+
+                    report_frame.dispose();
+                }
+            });
         }
     }
 

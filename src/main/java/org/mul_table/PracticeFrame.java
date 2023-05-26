@@ -36,8 +36,9 @@ class PracticeFrame extends JFrame implements ActionListener {
 	Random rand;
 	HighScoreTables tables;
 	ArrayList<JLabel> score_labels;
+	ExercisesStatistic statistics;
 
-	public PracticeFrame(Users users, Serializer serializer, Exercises exercises, User logged_in_user, HighScoreTables tables) {
+	public PracticeFrame(Users users, Serializer serializer, Exercises exercises, User logged_in_user, HighScoreTables tables, ExercisesStatistic statistics) {
 		this.users = users;
 		this.exercises = exercises;
 		this.serializer = serializer;
@@ -51,6 +52,7 @@ class PracticeFrame extends JFrame implements ActionListener {
 		this.has_started = false;
 		this.logged_in_user = logged_in_user;
 		this.tables = tables;
+		this.statistics = statistics;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(800, 600);
 		setTitle("Multiplication Table Practice");
@@ -186,7 +188,7 @@ class PracticeFrame extends JFrame implements ActionListener {
 					this.remove(this.question_label);
 					this.remove(this.answer_field);
 					for (JLabel label: this.score_labels)
-						this.remove(label);	
+						this.remove(label);
 					this.revalidate();
 					this.repaint();
 					this.tables.add_score(this.exercise_statistic);

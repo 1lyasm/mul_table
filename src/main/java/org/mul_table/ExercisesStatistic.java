@@ -12,4 +12,7 @@ public class ExercisesStatistic {
     public void add_statistic(ExerciseStatistic statistic) {
         this.statistic_array.add(statistic);
     }
+    public ArrayList<ExerciseStatistic> get_statistic_array() {
+        return this.statistic_array;
+    }
 }

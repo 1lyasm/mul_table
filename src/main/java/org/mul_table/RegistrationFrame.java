@@ -24,7 +24,7 @@ class RegistrationFrame extends JFrame implements ActionListener {
         setLayout(null);
 	    add_components();
         setVisible(true);
-	this.users = users;
+	    this.users = users;
     }
 
     public void add_components() {

@@ -8,8 +8,8 @@ import java.awt.event.WindowEvent;
 public class AdminPracticeFrame extends PracticeFrame {
     JButton admin_button;
     int last_e_len;
-    public AdminPracticeFrame(Users users, Serializer serializer, Exercises exercises, User logged_in_user, HighScoreTables tables) {
-        super(users, serializer, exercises, logged_in_user, tables);
+    public AdminPracticeFrame(Users users, Serializer serializer, Exercises exercises, User logged_in_user, HighScoreTables tables, ExercisesStatistic statistics) {
+        super(users, serializer, exercises, logged_in_user, tables, statistics);
         add_admin_components();
     }
 
@@ -25,7 +25,7 @@ public class AdminPracticeFrame extends PracticeFrame {
     public void actionPerformed(ActionEvent actionEvent) {
         super.actionPerformed(actionEvent);
         if (actionEvent.getSource() == admin_button) {
-            AdminFrame admin_frame = new AdminFrame(this.users, this.serializer, this.exercises);
+            AdminFrame admin_frame = new AdminFrame(this.users, this.serializer, this.exercises, this.tables, this.statistics);
             this.setVisible(false);
             AdminPracticeFrame this_frame = this;
             admin_frame.addWindowListener(new WindowAdapter() {
