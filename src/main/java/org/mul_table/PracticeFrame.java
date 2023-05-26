@@ -17,9 +17,11 @@ class PracticeFrame extends JFrame implements ActionListener {
 	JButton start_button;
 	JButton default_e_button;
 	JButton submit_button;
+	JButton exit_button;
 	JLabel timer_label;
 	JLabel mode_choice_label;
 	JLabel question_label;
+	JLabel score_info_label;
 	JTextField answer_field;
 	Users users;
 	int time_seconds;
@@ -32,8 +34,10 @@ class PracticeFrame extends JFrame implements ActionListener {
 	ExerciseStatistic exercise_statistic;
 	User logged_in_user;
 	Random rand;
+	HighScoreTables tables;
+	ArrayList<JLabel> score_labels;
 
-	public PracticeFrame(Users users, Serializer serializer, Exercises exercises, User logged_in_user) {
+	public PracticeFrame(Users users, Serializer serializer, Exercises exercises, User logged_in_user, HighScoreTables tables) {
 		this.users = users;
 		this.exercises = exercises;
 		this.serializer = serializer;
@@ -46,6 +50,7 @@ class PracticeFrame extends JFrame implements ActionListener {
 		this.submit_button.addActionListener(this);
 		this.has_started = false;
 		this.logged_in_user = logged_in_user;
+		this.tables = tables;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(800, 600);
 		setTitle("Multiplication Table Practice");
@@ -75,6 +80,10 @@ class PracticeFrame extends JFrame implements ActionListener {
 		this.default_e_button.addActionListener(this);
 		this.e_buttons.add(default_e_button);
 
+		this.exit_button = new JButton("Exit");
+		this.exit_button.setBounds(330, 450, 150, 40);
+		this.exit_button.addActionListener(this);
+
 		this.mode_choice_label = new JLabel("Mode Default");
 		this.mode_choice_label.setBounds(340, 200, 300, 40);
 		this.mode_choice_label.setFont(new Font("Serif", Font.PLAIN, 24));
@@ -82,6 +91,7 @@ class PracticeFrame extends JFrame implements ActionListener {
         this.add(start_button);
         this.add(timer_label);
 		this.add(this.default_e_button);
+		this.add(this.exit_button);
 		this.add(e_label);
 		this.add(this.mode_choice_label);
     }
@@ -149,6 +159,7 @@ class PracticeFrame extends JFrame implements ActionListener {
 			this.answer_field.setBounds(340, 200, 200, 40);
 			this.add(this.answer_field);
 			this.has_started = true;
+			this.show_high_score_table();
 		}
 		else if (actionEvent.getSource() == this.submit_button) {
 			try {
@@ -174,8 +185,12 @@ class PracticeFrame extends JFrame implements ActionListener {
 					this.remove(this.submit_button);
 					this.remove(this.question_label);
 					this.remove(this.answer_field);
+					for (JLabel label: this.score_labels)
+						this.remove(label);	
 					this.revalidate();
 					this.repaint();
+					this.tables.add_score(this.exercise_statistic);
+					this.show_high_score_table();
 				}
 				else {
 					int a = rand.nextInt(this.current_mode.get_a() + 1);
@@ -187,6 +202,9 @@ class PracticeFrame extends JFrame implements ActionListener {
 			catch (NumberFormatException e) {
 				JOptionPane.showMessageDialog(this, "You did not enter an integer");
 			}
+		}
+		else if (actionEvent.getSource() == this.exit_button) {
+			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
 		}
 		else if (actionEvent.getSource() == this.default_e_button) {
 			this.current_mode = new Exercise(10, 10, 10, "Default");
@@ -205,6 +223,34 @@ class PracticeFrame extends JFrame implements ActionListener {
 			}
 		}
     }
+
+	private void show_high_score_table() {
+		this.score_info_label = new JLabel("High scores");
+		this.score_info_label.setBounds(30, 30, 300, 40);
+		this.score_info_label.setFont(new Font("Serif", Font.PLAIN, 24));
+		this.add(this.score_info_label);
+
+		int last_y = 50;
+		HighScoreTable current_table = null;
+		for (HighScoreTable table: this.tables.get_tables())
+			if (table.get_exercise().get_name().equals(this.current_mode.get_name()))
+				current_table = table;
+
+		if (current_table == null)
+			return;
+
+		this.score_labels = new ArrayList<>();
+
+		for (ExerciseStatistic statistic: current_table.get_scores()) {
+			double average_score = Math.round(100 * (statistic.get_speed_score() + statistic.get_accuracy_score())) / 200.0;
+			JLabel new_score = new JLabel(statistic.get_user().get_username() + " - " + average_score);
+			new_score.setBounds(30, last_y + 30, 300, 40);
+			new_score.setFont(new Font("Serif", Font.PLAIN, 16));
+			this.add(new_score);
+			this.score_labels.add(new_score);
+			last_y += 30;
+		}
+	}
 
 	public ExerciseStatistic get_exercise_statistic() {
 		return this.exercise_statistic;

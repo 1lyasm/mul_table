@@ -64,4 +64,8 @@ public class ExerciseStatistic {
     public double get_speed_score() {
         return this.speed_score;
     }
+
+    public User get_user() {
+        return this.user;
+    }
 }

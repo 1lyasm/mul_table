@@ -9,7 +9,6 @@ public class HighScoreTables {
     public void add_score(ExerciseStatistic statistic) {
         int e_index = -1;
         for (int i = 0; i < this.tables.size(); ++i)
-            // TODO: enforce cant have exercise modes with duplicate names
             if (this.tables.get(i).get_exercise().get_name().equals(statistic.get_e_mode().get_name()))
                 e_index = i;
         if (e_index == -1) {
@@ -25,6 +24,10 @@ public class HighScoreTables {
                 }
             });
         }
+    }
+
+    public ArrayList<HighScoreTable> get_tables() {
+        return this.tables;
     }
 
     public HighScoreTables() {
