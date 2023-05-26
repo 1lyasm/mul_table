@@ -127,7 +127,7 @@ class AdminFrame extends JFrame implements ActionListener {
             }
         }
         else if (actionEvent.getSource() == this.report_button) {
-            ReportFrame report_frame = new ReportFrame(tables, statistics);
+            ReportFrame report_frame = new ReportFrame(this.tables, this.statistics);
             this.setVisible(false);
             report_frame.addWindowListener(new WindowAdapter() {
                 @Override

@@ -30,7 +30,7 @@ class LoginFrame extends JFrame implements ActionListener {
         setVisible(true);
         this.users = users;
         this.serializer = serializer;
-        this.statistics = new ExercisesStatistic();
+        this.statistics = serializer.deserialize_exercises_statistic();
         this.tables = serializer.deserialize_tables();
     }
 
@@ -87,21 +87,21 @@ class LoginFrame extends JFrame implements ActionListener {
                 Exercises exercises = this.serializer.deserialize_exercises();
                 if (users.get_user_by_uname_passw(username_text, password_text).get_is_admin()) {
                     JOptionPane.showMessageDialog(this, "You logged in successfully as admin");
-                    practice_frame = new AdminPracticeFrame(users, serializer, exercises, new User(username_text, password_text), this.tables, this.statistics);
+                    practice_frame = new AdminPracticeFrame(users, serializer, exercises, new User(username_text, password_text, true), this.tables, this.statistics);
                 } else {
                     JOptionPane.showMessageDialog(this, "You logged in successfully");
-                    practice_frame = new PracticeFrame(users, serializer, exercises, new User(username_text, password_text), this.tables, this.statistics);
+                    practice_frame = new PracticeFrame(users, serializer, exercises, new User(username_text, password_text, false), this.tables, this.statistics);
                 }
                 practice_frame.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent e) {
                         super.windowClosing(e);
                         if (practice_frame.get_exercise_statistic() != null) {
-                            statistics = serializer.deserialize_exercises_statistic();
                             statistics.add_statistic(practice_frame.get_exercise_statistic());
                             serializer.serialize_exercises_statistic(statistics);
 
-                            tables.add_score(practice_frame.get_exercise_statistic());
+                            set_tables(practice_frame.get_tables());
+//                            tables.add_score(practice_frame.get_exercise_statistic());
                             serializer.serialize_tables(tables);
                         }
                         practice_frame.dispose();
@@ -141,5 +141,7 @@ class LoginFrame extends JFrame implements ActionListener {
     }
 
     public Users get_users() {return this.users; }
+    public void set_tables(HighScoreTables tables) {
+        this.tables = tables;
+    };
 }
-

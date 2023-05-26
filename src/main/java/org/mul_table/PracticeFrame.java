@@ -35,7 +35,7 @@ class PracticeFrame extends JFrame implements ActionListener {
 	User logged_in_user;
 	Random rand;
 	HighScoreTables tables;
-	ArrayList<JLabel> score_labels;
+	ArrayList<JLabel> score_labels = new ArrayList<>();
 	ExercisesStatistic statistics;
 
 	public PracticeFrame(Users users, Serializer serializer, Exercises exercises, User logged_in_user, HighScoreTables tables, ExercisesStatistic statistics) {
@@ -256,6 +256,10 @@ class PracticeFrame extends JFrame implements ActionListener {
 
 	public ExerciseStatistic get_exercise_statistic() {
 		return this.exercise_statistic;
+	}
+
+	public HighScoreTables get_tables() {
+		return this.tables;
 	}
 }
 

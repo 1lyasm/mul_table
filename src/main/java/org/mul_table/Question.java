@@ -32,4 +32,20 @@ public class Question {
     public boolean is_false() {
         return this.correct_answer != this.given_answer;
     }
+
+    public int get_a() {
+        return a;
+    }
+
+    public int get_b() {
+        return b;
+    }
+
+    public int get_given_answer() {
+        return given_answer;
+    }
+
+    public int get_correct_answer() {
+        return correct_answer;
+    }
 }
