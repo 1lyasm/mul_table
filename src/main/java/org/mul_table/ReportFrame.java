@@ -5,19 +5,24 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 public class ReportFrame extends JFrame implements ActionListener {
     JButton go_back_button;
+    JButton save_button;
 
     HighScoreTables tables;
     ExercisesStatistic statistics;
+    String report_string;
 
     public ReportFrame(HighScoreTables tables, ExercisesStatistic statistics) {
         this.tables = tables;
         this.statistics = statistics;
-
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(800, 600);
@@ -34,9 +39,14 @@ public class ReportFrame extends JFrame implements ActionListener {
         this.go_back_button.addActionListener(this);
         this.add(this.go_back_button);
 
+        this.save_button = new JButton("Save");
+        this.save_button.setBounds(450, 450, 100, 50);
+        this.save_button.addActionListener(this);
+        this.add(this.save_button);
+
         JTextArea text_area = new JTextArea();
         text_area.setBounds(50, 50, 500, 500);
-        String report_string = "";
+        this.report_string = "";
         report_string += "user\tis_admin\tstart\t\ttotal_dur\ta\tb\tgiven\tcorrect\tdur\tspeed_score\tacc_score\tmode_a\tmode_b\tn\tmode_name\n";
 
         for (ExerciseStatistic statistic: this.statistics.get_statistic_array()) {
@@ -59,8 +69,6 @@ public class ReportFrame extends JFrame implements ActionListener {
             }
         }
 
-        // TODO: add save table as txt and xlsx
-
         text_area.setText(report_string);
         this.add(text_area);
         JScrollPane scroll = new JScrollPane (text_area,
@@ -72,5 +80,17 @@ public class ReportFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == this.go_back_button)
             this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        else if (e.getSource() == this.save_button) {
+            JFileChooser fileChooser = new JFileChooser();
+            if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+                try {
+                    Files.write(file.toPath(), this.report_string.getBytes(StandardCharsets.UTF_8));
+                } catch (IOException ex) {
+                    System.out.println("Can not write to file");
+                    System.exit(1);
+                }
+            }
+        }
     }
 }
