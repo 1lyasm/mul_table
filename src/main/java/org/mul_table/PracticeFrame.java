@@ -204,6 +204,7 @@ class PracticeFrame extends JFrame implements ActionListener {
 			catch (NumberFormatException e) {
 				JOptionPane.showMessageDialog(this, "You did not enter an integer");
 			}
+			this.answer_field.setText("");
 		}
 		else if (actionEvent.getSource() == this.exit_button) {
 			this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
