@@ -101,7 +101,6 @@ class LoginFrame extends JFrame implements ActionListener {
                             serializer.serialize_exercises_statistic(statistics);
 
                             set_tables(practice_frame.get_tables());
-//                            tables.add_score(practice_frame.get_exercise_statistic());
                             serializer.serialize_tables(tables);
                         }
                         practice_frame.dispose();
