@@ -1,6 +1,6 @@
 package org.mul_table;
 
-class User {
+public class User {
 	private final String username;
 	private final String password;
 	boolean is_admin;

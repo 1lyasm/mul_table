@@ -37,6 +37,9 @@ public class ExerciseStatistic {
     public Duration get_total_duration() {
         return this.total_duration;
     }
+    public void set_total_duration(Duration duration) {
+        this.total_duration = duration;
+    }
 
     public void extend_total_duration(Duration duration) {
         this.total_duration = this.total_duration.plus(duration);
@@ -60,9 +63,15 @@ public class ExerciseStatistic {
     public double get_accuracy_score() {
         return this.accuracy_score;
     }
+    public void set_accuracy_score(double score) {
+        this.accuracy_score = score;
+    }
 
     public double get_speed_score() {
         return this.speed_score;
+    }
+    public void set_speed_score(double score) {
+        this.speed_score = score;
     }
 
     public User get_user() {

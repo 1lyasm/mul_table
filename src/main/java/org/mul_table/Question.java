@@ -4,7 +4,6 @@ import java.time.Duration;
 
 public class Question {
     int a;
-
     int b;
     int given_answer;
     int correct_answer;

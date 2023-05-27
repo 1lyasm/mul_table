@@ -2,7 +2,7 @@ package org.mul_table;
 
 import java.util.ArrayList;
 
-class Users {
+public class Users {
 	private ArrayList<User> user_array;
 
 	public void add_user(User user) {
